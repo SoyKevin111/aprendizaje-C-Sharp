@@ -1,0 +1,50 @@
+Conexión a base de datos en .NET ORM
+
+componentes:
+
+ODBC: conexion a cualquier base de datos compatible. 
+OLE DB: tipo de conexion mas antigua.
+sql Server (microsfot)
+conextion azure sql (mas seguro de Microsoft)
+
+
+ADO.net
+conjunto de librerias para acceder a los datos y servicios para los datos.
+abre conexiones, lee resultados, ejecuta comandos, etc.
+
+Datasets: estructuras en memorias que simulan base de datos.
+Linq to SQL: capa que traduce consultas en C# como si fueran SQL.
+entity framework: traduce objetos C# a tablas sql y viceversa.
+ado.net es una libreria.
+
+[.net application](aplicacion)
+	|
+	|
+[dataSets, Linq to sql, Entity Framework](acceso a datos)
+	|
+	|
+[ado.net](puente)
+	|
+[sql server, ODBC, OLE DB, custom providers...](proveedores)
+	|
+[sql, no sql, xml, rest, sharepoint, excel](fuente de datos)
+
+-migraciones
+
+
+@Anotaciones:
+[Key]// Main Key
+[ForeignKey("CategoryId")]
+[NotMapped] //omite mapeo de este campo
+
+
+
+
+
+
+
+
+
+
+
+	

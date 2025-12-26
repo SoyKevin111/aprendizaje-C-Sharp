@@ -1,0 +1,56 @@
+.net
+
+dotnet: es la herramienta de linea de comandos de .net (dotnet cli).
+aspire: un stack de herramientas para consturir apps colud-native y microservicios.
+
+CLR
+CLS (regla de metricas estandarizada para compilar), traduce a assembly
+CLI = traduce a assembly
+
+cts: common type system = tipo por defecto de lenguaje de programacion para ser compatible con .net
+ categorias:
+  clases, estructuras, enumeraciones, interfaces, delegaciones
+
+
+
+
+ejecutar app: dotnet run
+
+verificar si toda la app esta bien (compilar): dotnet build
+restaurar dependencias: dotnet restore
+ver estado de cambios en consola: dotnet watch run
+
+2 modos de compilacion
+- devops
+
+- release: elimina todo archivo que no se necesita en produccion
+dotnet build --configuration release
+
+
+global.json
+administra las versiones de los sdk de .net
+crearlo:
+dotnet new globaljson
+
+
+"allowPrerelease": false,
+habilita o des el uso de relase
+
+
+nuget : gestor de paquetes de .net (como maven central)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
