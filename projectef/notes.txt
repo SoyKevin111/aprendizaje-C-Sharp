@@ -31,6 +31,7 @@ Migraciones
 - permite gestionar los nuevos cambios en base de datos mendiante la cli de ef,
 que permite hacer un seguimiento de los nuevos registros, dropearlo, etc.
 - instalar tools en cli dotnet (dotnet ef tools)
+- trazabilidad de los cambios
 
 dotnet add package Microsoft.EntityFrameworkCore.Design --version 10.0.0
 
