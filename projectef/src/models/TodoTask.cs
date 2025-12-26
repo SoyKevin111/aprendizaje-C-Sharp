@@ -6,21 +6,13 @@ namespace projectef.src.models;
 
 public class TodoTask
 {
-  [Key]// Main Key
   public Guid TaskId { get; set; }
-
-  [ForeignKey("CategoryId")]
   public Guid CategoryId { get; set; }
-
-  [Required]
-  [MaxLength(200)]
   public string Title { get; set; }
   public string Description { get; set; }
   public Priority PriorityTask { get; set; }
   public DateTime Create_on { get; set; }
   public virtual Category category { get; set; } //cree proxies, lazy loading
-
-  [NotMapped] //omite mapeo de este campo
   public string Summary { get; set; }
 }
 

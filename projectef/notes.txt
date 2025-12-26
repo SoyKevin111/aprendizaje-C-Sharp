@@ -9,4 +9,17 @@ dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 10.0.0 //post
 //configuracion para poder usar 'add' en los paquetes de nuget org:
 dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
 dotnet nuget list source  
-dotnet nuget locals all --clear    
+dotnet nuget locals all --clear
+
+
+
+Fluent API (de EF)
+- trata atributos avanzados
+- definir y tratar tablas, propiedaes, etc en codigo c#
+- funciones
+
+
+// FK sin navegación
+task.HasOne<Category>()
+    .WithMany()
+    .HasForeignKey(t => t.CategoryId);

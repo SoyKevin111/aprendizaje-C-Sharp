@@ -5,7 +5,7 @@ using projectef;
 var builder = WebApplication.CreateBuilder(args);
 
 //obtener configuracion de la conextionStrings;
-var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+var connectionString = builder.Configuration.GetConnectionString("cnPostgres");
 
 //Registrar DbContext con Postgresql
 builder.Services.AddDbContext<TasksContext>(options =>
