@@ -28,13 +28,17 @@ task.HasOne<Category>()
 Migraciones
 - guarda de manera incremental cambios hechos en DB
 - versionamiento DB
+- permite gestionar los nuevos cambios en base de datos mendiante la cli de ef,
+que permite hacer un seguimiento de los nuevos registros, dropearlo, etc.
 - instalar tools en cli dotnet (dotnet ef tools)
 
 dotnet add package Microsoft.EntityFrameworkCore.Design --version 10.0.0
 
 comandos basicos:
 instalar: dotnet tool install --global dotnet-ef
-dotnet ef migrations add initialCreate
-dotnet ef migrations add MyMigration
+_______________________________________
+dotnet ef migrations add NuevoCambio
 dotnet ef database update
+_______________________________________
+dotnet ef migrations add MyMigration
 

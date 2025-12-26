@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using projectef;
@@ -11,9 +12,11 @@ using projectef;
 namespace projectef.Migrations
 {
     [DbContext(typeof(TasksContext))]
-    partial class TasksContextModelSnapshot : ModelSnapshot
+    [Migration("20251226053722_ColumnaPesoFromCategory")]
+    partial class ColumnaPesoFromCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,13 +43,9 @@ namespace projectef.Migrations
                     b.Property<int>("Peso")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Tag")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("CategoryId");
 
-                    b.ToTable("category", (string)null);
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("projectef.src.models.TodoTask", b =>

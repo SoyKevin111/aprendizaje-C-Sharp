@@ -13,10 +13,12 @@ public class TasksContext : DbContext
   {
     modelBuilder.Entity<Category>(category =>
     {
-      category.ToTable("Category");
+      category.ToTable("category");
       category.HasKey(c => c.CategoryId);
       category.Property(c => c.Name).IsRequired().HasMaxLength(150);
       category.Property(c => c.Descripcion);
+      category.Property(c => c.Peso);
+      category.Property(c => c.Tag);
     });
 
     modelBuilder.Entity<TodoTask>(task =>
