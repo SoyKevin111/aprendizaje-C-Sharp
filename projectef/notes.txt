@@ -3,7 +3,7 @@ dependencias:
 dotnet add package Microsoft.EntityFrameworkCore --version 10.0.0 // EF
 dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 10.0.0 //simula base de datos en memoria
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 10.0.0 //motor sql server
-
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 10.0.0 //postgresql
 
 
 //configuracion para poder usar 'add' en los paquetes de nuget org:

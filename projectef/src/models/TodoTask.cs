@@ -18,7 +18,7 @@ public class TodoTask
   public string Description { get; set; }
   public Priority PriorityTask { get; set; }
   public DateTime Create_on { get; set; }
-  public virtual Category category { get; set; }
+  public virtual Category category { get; set; } //cree proxies, lazy loading
 
   [NotMapped] //omite mapeo de este campo
   public string Summary { get; set; }

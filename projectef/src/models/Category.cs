@@ -12,5 +12,5 @@ public class Category
   public string Name { get; set; }
 
   public string Descripcion { get; set; }
-  public virtual ICollection<TodoTask> Tasks { get; set; }
+  public virtual ICollection<TodoTask> Tasks { get; set; } //proxies, lazy loading
 }

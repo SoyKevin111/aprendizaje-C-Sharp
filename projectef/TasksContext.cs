@@ -5,7 +5,7 @@ namespace projectef;
 
 public class TasksContext : DbContext
 {
-  public DbSet<Category> Categories { get; set; }
-  public DbSet<TodoTask> Tasks { get; set; }
+  public DbSet<Category> Category { get; set; }
+  public DbSet<TodoTask> Task { get; set; }
   public TasksContext(DbContextOptions<TasksContext> options) : base(options) { }
 }
