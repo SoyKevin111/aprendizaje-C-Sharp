@@ -29,6 +29,12 @@ app.MapGet("/dbconnection", async ([FromServices] TasksContext dbContext) =>
   }
 });
 
+app.MapGet("/api/tareas", async ([FromServices] TasksContext dbContext) =>
+{
+  return Results.Ok(dbContext.Task.Include(t => t.category).Where(t => t.PriorityTask == projectef.src.models.Priority.Medium));
+});
+
+
 //probar: http://localhost:5167/dbconnection
 
 app.Run();
