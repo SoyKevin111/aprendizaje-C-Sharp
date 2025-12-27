@@ -1,0 +1,16 @@
+
+crear proyecto en cli:
+dotnet new webapi --use-controllers -n apipeliculas
+
+Para migracion simple, basta con el package tools de EF.
+Para migracion mas compleja, usar Design de EF.
+Empezar migracion: 
+dotnet ef migrations add InitialData
+
+paquetes:
+dotnet add package AutoMapper --version 16.0.0
+dotnet add package Swashbuckle.AspNetCore.SwaggerUI --version 10.1.0
+
+
+documentacion inyeccion dependencias automapper:
+https://docs.automapper.io/en/latest/Dependency-injection.html#Configuration.html#profile-instances
