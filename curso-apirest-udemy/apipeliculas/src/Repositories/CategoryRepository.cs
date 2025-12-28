@@ -19,6 +19,12 @@ namespace apipeliculas.src.Repositories.Impl
             return Save();
         }
 
+        public bool DeleteCategory(Category category)
+        {
+            _db.Category.Remove(category);
+            return Save();
+        }
+
         public ICollection<Category> FindAll()
         {
             return _db.Category.OrderBy(c => c.Name).ToList();
@@ -44,10 +50,12 @@ namespace apipeliculas.src.Repositories.Impl
             return _db.SaveChanges() >= 0;
         }
 
-        public bool UpdateCateogry(Category category)
+        public bool UpdateCategory(Category category)
         {
             category.CreatedAt = DateTime.UtcNow;
-            _db.Category.Update(category);
+            var categoryLoad = _db.Category.Find(category.Id);
+            if (categoryLoad == null) { return false; }
+            _db.Entry(categoryLoad).CurrentValues.SetValues(category); //!PREFERIBLE MAPEAR o FACTORY
             return Save();
         }
     }

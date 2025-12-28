@@ -9,7 +9,8 @@ namespace apipeliculas.src.Repositories
         bool IfExistCategoryById(int id);
         bool IfExistCategoryByName(string name);
         bool CreateCategory(Category category);
-        bool UpdateCateogry(Category category);
+        bool UpdateCategory(Category category);
+        bool DeleteCategory(Category category);
         bool Save();
     }
 }
