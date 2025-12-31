@@ -1,0 +1,198 @@
+🧠 EF Core – RESUMEN PRÁCTICO (Java → .NET)
+🔹 Reglas base (léelas siempre)
+
+EF Core ≈ Hibernate
+
+DbContext ≈ EntityManager
+
+Fluent API > Data Annotations
+
+No hay Lazy Loading por defecto
+
+Usa siempre Include()
+
+Controla DeleteBehavior
+
+1️⃣ Entidad básica
+public class User
+{
+    public int Id { get; set; }      // PK automática
+    public string Name { get; set; } = null!;
+}
+
+2️⃣ One-to-One (1:1)
+
+📌 FK en la entidad dependiente
+
+public class User
+{
+    public int Id { get; set; }
+    public Profile Profile { get; set; } = null!;
+}
+
+public class Profile
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; } = null!;
+}
+
+builder.HasOne(u => u.Profile)
+       .WithOne(p => p.User)
+       .HasForeignKey<Profile>(p => p.UserId);
+
+3️⃣ One-to-Many (1:N) 🔥
+public class Category
+{
+    public int Id { get; set; }
+    public ICollection<Product> Products { get; set; } = [];
+}
+
+public class Product
+{
+    public int Id { get; set; }
+    public int CategoryId { get; set; }
+    public Category Category { get; set; } = null!;
+}
+
+builder.HasMany(c => c.Products)
+       .WithOne(p => p.Category)
+       .HasForeignKey(p => p.CategoryId);
+
+4️⃣ Many-to-Many (N:N) SIMPLE
+
+📌 EF crea la tabla intermedia
+
+builder.HasMany(s => s.Courses)
+       .WithMany(c => c.Students)
+       .UsingEntity(j => j.ToTable("StudentCourses"));
+
+5️⃣ Many-to-Many REAL (con tabla intermedia) ✅
+
+📌 Recomendado en sistemas reales
+
+public class StudentCourse
+{
+    public int StudentId { get; set; }
+    public int CourseId { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+builder.HasKey(sc => new { sc.StudentId, sc.CourseId });
+
+6️⃣ Cargar relaciones (IMPORTANTÍSIMO)
+context.Categories
+       .Include(c => c.Products)
+       .ToList();
+
+
+📌 Sin Include() → NO se cargan relaciones
+
+7️⃣ DeleteBehavior (no olvides)
+.OnDelete(DeleteBehavior.Restrict); // recomendado
+// Cascade | SetNull | NoAction
+
+8️⃣ Configuración limpia (BEST PRACTICE)
+public class ProductConfig : IEntityTypeConfiguration<Product>
+{
+    public void Configure(EntityTypeBuilder<Product> builder)
+    {
+        builder.Property(p => p.Name)
+               .IsRequired()
+               .HasMaxLength(100);
+    }
+}
+
+modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+9️⃣ Java → .NET traducción mental
+Java (JPA)	EF Core
+@Entity	POCO
+@OneToMany	HasMany
+mappedBy	WithOne
+@JoinTable	UsingEntity
+LAZY	Include()
+EntityManager	DbContext
+🔥 Frase para recordar
+
+En EF Core: nada se carga solo, todo se configura explícito.
+
+
+#Manejar la organizacion de archivos:
+
+src/
+ ├── Domain/
+ │    └── Entities/
+ │         ├── User.cs
+ │         └── Order.cs
+ │
+ ├── Infrastructure/
+ │    └── Persistence/
+ │         ├── Context/
+ │         │    └── AppDbContext.cs
+ │         │
+ │         ├── Configurations/
+ │         │    ├── UserConfiguration.cs
+ │         │    ├── OrderConfiguration.cs
+ │         │    └── OrderItemConfiguration.cs
+ │         │
+ │         └── Migrations/
+ │
+ └── API/
+
+1️⃣ Entidad limpia (sin EF)
+public class User
+{
+    public Guid Id { get; private set; }
+    public string Email { get; private set; }
+}
+
+✔️ Sin:
+[Key]
+[Column]
+[Index]
+
+2️⃣ Configuración por entidad (IEntityTypeConfiguration)
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+public class UserConfiguration : IEntityTypeConfiguration<User>
+{
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.ToTable("Users");
+
+        builder.HasKey(u => u.Id);
+
+        builder.Property(u => u.Email)
+               .IsRequired()
+               .HasMaxLength(150);
+
+        builder.HasIndex(u => u.Email)
+               .IsUnique();
+    }
+}
+
+
+💡 Ventajas:
+
+Una clase = una entidad
+Legible
+Testeable
+Fácil de cambiar
+
+3️⃣ DbContext minimalista
+public class AppDbContext : DbContext
+{
+    public DbSet<User> Users => Set<User>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(AppDbContext).Assembly
+        );
+    }
+}
+
+🔑 Esto es clave senior:
+El DbContext no sabe qué se configura
+Solo aplica configuraciones

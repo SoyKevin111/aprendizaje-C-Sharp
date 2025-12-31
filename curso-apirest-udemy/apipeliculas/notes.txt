@@ -6,6 +6,8 @@ Para migracion simple, basta con el package tools de EF.
 Para migracion mas compleja, usar Design de EF.
 Empezar migracion: 
 dotnet ef migrations add InitialData
+Actualizar DB:
+dotnet ef database update
 
 paquetes:
 dotnet add package AutoMapper --version 16.0.0
