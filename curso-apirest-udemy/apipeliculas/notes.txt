@@ -16,3 +16,10 @@ dotnet add package Swashbuckle.AspNetCore.SwaggerUI --version 10.1.0
 
 documentacion inyeccion dependencias automapper:
 https://docs.automapper.io/en/latest/Dependency-injection.html#Configuration.html#profile-instances
+
+_logger.LogTrace("Detalle muy fino");
+_logger.LogDebug("Info para debug");
+_logger.LogInformation("Evento normal");
+_logger.LogWarning("Algo raro pero sigue");
+_logger.LogError("Error grave");
+_logger.LogCritical("Sistema caído");

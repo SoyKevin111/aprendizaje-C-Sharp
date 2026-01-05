@@ -1,0 +1,11 @@
+#Variable url
+@baseUrl = http://localhost:5000/api/movies
+
+### Obtener todas las películas
+GET {{baseUrl}}
+Accept: application/json
+
+
+### Obtener película por ID
+GET {{baseUrl}}/1
+Accept: application/json

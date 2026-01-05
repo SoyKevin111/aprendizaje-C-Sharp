@@ -48,7 +48,7 @@ namespace apipeliculas.src.Repositories.Impl
 
         public ICollection<Movie> FindMoviesByCategoryId(int id)
         {
-            return _db.Movie.Include(c => c.Category).Where(c => c.Id == id).ToList();
+            return _db.Movie.Include(c => c.Category).Where(m => m.CategoryId == id).ToList();
         }
 
         public bool IfExistMovieById(int id)

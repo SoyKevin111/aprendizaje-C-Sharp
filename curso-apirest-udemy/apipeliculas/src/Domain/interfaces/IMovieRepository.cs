@@ -7,7 +7,6 @@ namespace apipeliculas.src.Repositories
         ICollection<Movie> FindAll();
         ICollection<Movie> FindMoviesByCategoryId(int id);
         IEnumerable<Movie> FindMovieByName(string name);
-
         Movie FindById(int id);
         bool IfExistMovieById(int id);
         bool IfExistMovieByName(string name);

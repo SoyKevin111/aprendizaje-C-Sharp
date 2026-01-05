@@ -1,0 +1,57 @@
+﻿🔍 Búsqueda y navegación
+
+Ctrl + , → Buscar archivos, clases, símbolos (Quick Search) ⭐
+
+Ctrl + Shift + F → Buscar texto en todo el proyecto
+
+Ctrl + F → Buscar en el archivo actual
+
+Ctrl + H → Reemplazar
+
+Ctrl + - / Ctrl + Shift + - → Atrás / Adelante (navegación)
+
+✏️ Selección múltiple (equivalente a Ctrl+D)
+
+👉 Visual Studio NO tiene Ctrl+D por defecto, pero sí esto:
+
+Ctrl + Shift + L → Selecciona todas las coincidencias de la selección ⭐
+
+Alt + Shift + . → Seleccionar siguiente coincidencia
+
+Alt + Shift + , → Seleccionar coincidencia anterior
+
+💡 Estos son los más cercanos al comportamiento de VS Code.
+
+Puedes reasignar Ctrl+D a
+Edit.SelectNextOccurrence
+en Herramientas → Opciones → Entorno → Teclado
+
+🧠 Edición rápida de código
+
+Ctrl + . → Acciones rápidas / refactor ⭐
+
+Ctrl + Shift + Space → Info de parámetros
+
+Ctrl + Space → Autocompletar
+
+Alt + ↑ / ↓ → Mover línea arriba / abajo
+
+Ctrl + Shift + Enter → Nueva línea sin romper código
+
+Ctrl + K, Ctrl + D → Formatear documento
+
+🧩 Cursores y bloques
+
+Alt + Shift + Click → Múltiples cursores
+
+Shift + Alt + ↑ / ↓ → Duplicar línea
+
+Ctrl + L → Seleccionar línea completa
+
+🧪 Git / Explorador
+
+Ctrl + Alt + L → Explorador de soluciones
+
+Ctrl + 0, G → Git Changes
+
+Ctrl + 0, R → Git Repository

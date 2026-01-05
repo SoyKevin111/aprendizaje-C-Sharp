@@ -17,11 +17,13 @@ builder.Services.AddSwaggerGen();
 
 // Add repositories
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MoviesMapper));
 
 var app = builder.Build();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -35,5 +37,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    logger.LogInformation("Swagger UI disponible en: http://localhost:5000/swagger");
+});
 
 app.Run();

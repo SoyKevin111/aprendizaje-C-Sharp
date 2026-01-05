@@ -1,3 +1,5 @@
+using apipeliculas.src.Models;
+
 namespace apipeliculas.src.Dtos
 {
     public class CreateMovieDTO
