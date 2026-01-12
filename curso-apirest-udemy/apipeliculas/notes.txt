@@ -22,4 +22,10 @@ _logger.LogDebug("Info para debug");
 _logger.LogInformation("Evento normal");
 _logger.LogWarning("Algo raro pero sigue");
 _logger.LogError("Error grave");
-_logger.LogCritical("Sistema caído");
+_logger.LogCritical("Sistema caï¿½do");
+
+
+
+CORS: Cross Origin Resource Sharing
+Mecanismo de seguridad en navegadores web.
+Indica a un servidor si una aplicacion web cargada en un dominio diferente puede acceder a sus recursos.

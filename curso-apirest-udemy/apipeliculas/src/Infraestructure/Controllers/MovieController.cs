@@ -3,6 +3,7 @@ using apipeliculas.src.Models;
 using apipeliculas.src.Repositories;
 using apipeliculas.src.Repositories.Impl;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apipeliculas.src.Infraestructure.Controllers
@@ -23,6 +24,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
             this._logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,6 +40,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:int}", Name = "GetMovieById")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,7 +58,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
 
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(MovieDTO))]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -81,6 +84,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{id:int}", Name = "UpdatePatchMovie")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -100,6 +104,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}", Name = "DeleteMovie")]
         public IActionResult DeleteMovie(int id)
         {
@@ -116,6 +121,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet("search/movie/category/{categoryId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -138,6 +144,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet("search/movie")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

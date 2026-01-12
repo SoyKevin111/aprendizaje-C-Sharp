@@ -2,11 +2,17 @@ using apipeliculas.src.Dtos;
 using apipeliculas.src.Models;
 using apipeliculas.src.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apipeliculas.src.Controllers
 {
+    //[Authorize(Roles = "Admin")]
+
     [Route("api/categories")]
+    [ApiController]
+    [EnableCors("PoliticaCors")]
     public class CategoryController : ControllerBase //rest
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -18,10 +24,14 @@ namespace apipeliculas.src.Controllers
             this._mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
+        [ResponseCache(CacheProfileName = "CachePorDefault30")]
+        //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)] //no se guarde cache, ni cliente ni servidor
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetCategories()
+        //[EnableCors("PoliticaCors")]
+        public IActionResult GetCategories() //XD
         {
             var categories = _categoryRepository.FindAll();
             var categoriesDto = new List<CategoryDTO>();
@@ -32,6 +42,7 @@ namespace apipeliculas.src.Controllers
             return Ok(categoriesDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:int}", Name = "GetCategory")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -47,6 +58,7 @@ namespace apipeliculas.src.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CreateCategory([FromBody] CreateCategoryDTO dto)
         {
@@ -66,6 +78,7 @@ namespace apipeliculas.src.Controllers
             return CreatedAtRoute("GetCategory", new { id = category.Id }, category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{id:int}", Name = "UpdatePatchCategory")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult UpdatePatchCategory(int id, [FromBody] CategoryDTO dto)
@@ -82,6 +95,7 @@ namespace apipeliculas.src.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}", Name = "UpdateCategory")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult UpdateCategory(int id, [FromBody] CategoryDTO dto)
@@ -102,6 +116,7 @@ namespace apipeliculas.src.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}", Name = "DeleteCategory")]
         public IActionResult DeleteCategory(int id)
         {
