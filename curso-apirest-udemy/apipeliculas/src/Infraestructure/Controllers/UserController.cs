@@ -3,6 +3,7 @@ using apipeliculas.src.auth;
 using apipeliculas.src.Domain.Dtos;
 using apipeliculas.src.Domain.interfaces;
 using apipeliculas.src.Domain.Models;
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace apipeliculas.src.Infraestructure.Controllers
 {
     [Route("api/users")]
+    [ApiVersion("1.0")]
+    [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _uRepo;

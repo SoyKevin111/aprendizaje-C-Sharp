@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace apipeliculas.src.Infraestructure.Repositories
 {
@@ -88,7 +89,8 @@ namespace apipeliculas.src.Infraestructure.Repositories
             UserLoginResponseDTO userLoginResponseDTO = new()
             {
                 Token = manageToken.WriteToken(token),
-                User = _mapper.Map<UserDataDTO>(user)
+                User = _mapper.Map<UserDataDTO>(user),
+                Role = roles.FirstOrDefault()
             };
 
             return userLoginResponseDTO;
