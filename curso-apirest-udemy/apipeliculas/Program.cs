@@ -5,6 +5,7 @@ using apipeliculas.src.Infraestructure.Repositories;
 using apipeliculas.src.Mapper;
 using apipeliculas.src.Repositories;
 using apipeliculas.src.Repositories.Impl;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -86,12 +87,31 @@ builder.Services.AddSwaggerGen(/* options =>
     } */
 );
 
+
+//CORS
 builder.Services.AddCors(p => p.AddPolicy("PoliticaCors", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }
 ));
 
+var apiVersioningBuilder = builder.Services.AddApiVersioning(option =>
+{
+    option.AssumeDefaultVersionWhenUnspecified = false; //asume la version
+    option.DefaultApiVersion = new ApiVersion(1, 0);
+    option.ReportApiVersions = true;
+    option.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version")
+    );
+}
+);
+
+apiVersioningBuilder.AddApiExplorer(
+    options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+    }
+);
 
 
 var app = builder.Build();

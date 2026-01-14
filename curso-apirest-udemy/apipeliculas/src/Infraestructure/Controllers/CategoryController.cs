@@ -1,6 +1,7 @@
 using apipeliculas.src.Dtos;
 using apipeliculas.src.Models;
 using apipeliculas.src.Repositories;
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -26,6 +27,8 @@ namespace apipeliculas.src.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        [ApiVersion("1.0")]
+        [ApiVersion("2.0")]
         [ResponseCache(CacheProfileName = "CachePorDefault30")]
         //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)] //no se guarde cache, ni cliente ni servidor
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
