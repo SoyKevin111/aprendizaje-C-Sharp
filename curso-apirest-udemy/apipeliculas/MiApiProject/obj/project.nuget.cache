@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "p0PHLScF87Q=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\kevin\\cuentas-github\\personal\\practica\\c#\\curso-apirest-udemy\\apipeliculas\\MiApiProject\\MiApiProject.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\kevin\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.1\\microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
+    "C:\\Users\\kevin\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

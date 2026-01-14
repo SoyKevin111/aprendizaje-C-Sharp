@@ -1,3 +1,4 @@
+Crear proyecto: dotnet new webapi -controllers -o NombreProyecto
 .net
 
 dotnet: es la herramienta de linea de comandos de .net (dotnet cli).
