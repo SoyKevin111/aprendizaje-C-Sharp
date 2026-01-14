@@ -9,14 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace apipeliculas.src.Infraestructure.Controllers
 {
-
     [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _uRepo;
         private readonly IMapper _mapper;
         private readonly ResponseAPI _resAPI;
-
 
         public UserController(IUserRepository uRepo, IMapper mapper)
         {
@@ -29,31 +27,34 @@ namespace apipeliculas.src.Infraestructure.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            var users = _uRepo.FindAll();
+            var users = await _uRepo.FindAll();
+
             var userDto = new List<UserDTO>();
             foreach (var u in users)
             {
                 userDto.Add(_mapper.Map<UserDTO>(u));
             }
+
             return Ok(userDto);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("{id:int}", Name = "GetUserById")]
+        [HttpGet("{id}", Name = "GetUserById")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetUserById(int id)
+        public async Task<IActionResult> GetUserById(string id)
         {
-            var user = _uRepo.FindById(id);
+            var user = await _uRepo.FindById(id);
+
             if (user == null)
             {
                 return NotFound();
             }
+
             var userDto = _mapper.Map<UserDTO>(user);
             return Ok(userDto);
-
         }
 
         [AllowAnonymous]
@@ -64,7 +65,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO registerDTO)
         {
-            bool isUniqueUser = _uRepo.IsUniqueUser(registerDTO.Username);
+            bool isUniqueUser = await _uRepo.IsUniqueUser(registerDTO.Username);
             if (!isUniqueUser)
             {
                 _resAPI.StatusCode = HttpStatusCode.BadRequest;
@@ -85,7 +86,6 @@ namespace apipeliculas.src.Infraestructure.Controllers
             _resAPI.StatusCode = HttpStatusCode.OK;
             _resAPI.IsSucess = true;
             return Ok(_resAPI);
-
         }
 
         [AllowAnonymous]
@@ -97,6 +97,7 @@ namespace apipeliculas.src.Infraestructure.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginDTO loginDTO)
         {
             var loginResponse = await _uRepo.Login(loginDTO);
+
             if (loginResponse.User == null && string.IsNullOrEmpty(loginResponse.Token))
             {
                 _resAPI.StatusCode = HttpStatusCode.BadRequest;
@@ -110,8 +111,5 @@ namespace apipeliculas.src.Infraestructure.Controllers
             _resAPI.Result = loginResponse;
             return Ok(_resAPI);
         }
-
-
-
     }
 }

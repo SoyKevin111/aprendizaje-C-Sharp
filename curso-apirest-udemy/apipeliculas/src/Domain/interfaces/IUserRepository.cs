@@ -6,10 +6,10 @@ namespace apipeliculas.src.Domain.interfaces
 {
     public interface IUserRepository
     {
-        ICollection<User> FindAll();
-        User FindById(int id);
-        bool IsUniqueUser(string username);
+        Task<ICollection<AppUser>> FindAll();
+        Task<AppUser> FindById(string id);
+        Task<bool> IsUniqueUser(string username);
         Task<UserLoginResponseDTO> Login(UserLoginDTO dto);
-        Task<User> Register(UserRegisterDTO dto);
+        Task<UserDataDTO> Register(UserRegisterDTO dto);
     }
 }

@@ -1,13 +1,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using apipeliculas.src.auth;
 using apipeliculas.src.auth.Dtos;
 using apipeliculas.src.Data;
 using apipeliculas.src.Domain.interfaces;
 using apipeliculas.src.Domain.Models;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace apipeliculas.src.Infraestructure.Repositories
 {
@@ -15,44 +17,58 @@ namespace apipeliculas.src.Infraestructure.Repositories
     {
         private readonly AplicationDbContext _db;
         private readonly string _SECRET_KEY;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMapper _mapper;
 
-        public UserRepository(AplicationDbContext db, IConfiguration cfg)
+        public UserRepository(AplicationDbContext db, IConfiguration cfg, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             this._db = db;
             this._SECRET_KEY = cfg.GetValue<string>("ApiSettings:Secret_Key");
+            this._userManager = userManager;
+            this._roleManager = roleManager;
+            this._mapper = mapper;
         }
 
-        public ICollection<User> FindAll()
+        public async Task<ICollection<AppUser>> FindAll()
         {
-            return _db.User.OrderBy(u => u.Username).ToList();
+            return await _db.AppUser
+                .OrderBy(u => u.UserName)
+                .ToListAsync();
         }
 
-        public User FindById(int id)
+        public async Task<AppUser> FindById(string id)
         {
-            return _db.User.FirstOrDefault(u => u.Id == id);
+            return await _db.AppUser
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public bool IsUniqueUser(string username)
+        public async Task<bool> IsUniqueUser(string username)
         {
-            var userDB = _db.User.FirstOrDefault(u => u.Username == username);
+            var userDB = await _db.AppUser
+                .FirstOrDefaultAsync(u => u.UserName == username);
+
             return userDB == null;
         }
 
         public async Task<UserLoginResponseDTO> Login(UserLoginDTO dto)
         {
-            var passwordEncrypt = GetMD5(dto.Password);
-            var user = _db.User.FirstOrDefault(
-                u => u.Username.Equals(dto.Username, StringComparison.CurrentCultureIgnoreCase)
-                && u.Password == passwordEncrypt
-            );
+            var user = await _userManager.FindByNameAsync(dto.Username);
+            if (user == null) return new UserLoginResponseDTO() { Token = "", User = null };
+
+            bool isValid = await _userManager.CheckPasswordAsync(user, dto.Password);
+            if (!isValid) return new UserLoginResponseDTO() { Token = "", User = null };
+
             //! user no exists
-            if (user == null)
+            if (user == null || isValid == false)
                 return new UserLoginResponseDTO()
                 {
                     Token = "",
                     User = null
                 };
+
             //? user exists
+            var roles = await _userManager.GetRolesAsync(user);
             var manageToken = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_SECRET_KEY);
 
@@ -60,8 +76,8 @@ namespace apipeliculas.src.Infraestructure.Repositories
             {
                 Subject = new ClaimsIdentity( //Claims[]
                     [ //conjunto de afirmaciones estructuradas (claims), describen el contexto de identidad y autorización asociado al token.
-                        new(ClaimTypes.Name, user.Username.ToString()),
-                        new(ClaimTypes.Role, user.Role)
+                        new(ClaimTypes.Name, user.UserName.ToString()),
+                        new(ClaimTypes.Role, roles.FirstOrDefault())
                     ]
                 ),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -72,35 +88,42 @@ namespace apipeliculas.src.Infraestructure.Repositories
             UserLoginResponseDTO userLoginResponseDTO = new()
             {
                 Token = manageToken.WriteToken(token),
-                User = user
+                User = _mapper.Map<UserDataDTO>(user)
             };
 
             return userLoginResponseDTO;
         }
 
-        public async Task<User> Register(UserRegisterDTO dto)
+        public async Task<UserDataDTO> Register(UserRegisterDTO dto)
         {
-            var passwordEncrypt = GetMD5(dto.Password);
-            User user = new()
+            AppUser user = new()
             {
-                Username = dto.Username,
-                Name = dto.Name,
-                Role = dto.Role
+                UserName = dto.Username,
+                Email = dto.Username,
+                NormalizedEmail = dto.Username.ToUpper(),
+                Name = dto.Name, //me olvide agregar el campo XD
+                CreatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd")
             };
 
-            _db.User.Add(user);
-            await _db.SaveChangesAsync();
-            user.Password = passwordEncrypt;
-            return user;
-        }
+            var result = await _userManager.CreateAsync(user, dto.Password);
 
-        //? Encriptar password con MD5
-        public static string GetMD5(string value)
-        {
-            using var md5 = MD5.Create();
-            var bytes = Encoding.UTF8.GetBytes(value);
-            var hash = md5.ComputeHash(bytes);
-            return Convert.ToHexString(hash);
+            if (result.Succeeded)
+            {
+                if (!await _roleManager.RoleExistsAsync("Admin"))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                    await _roleManager.CreateAsync(new IdentityRole("Register"));
+                }
+
+                await _userManager.AddToRoleAsync(user, "Admin");
+
+                var userResult = await _db.AppUser
+                    .FirstOrDefaultAsync(u => u.UserName == dto.Username);
+
+                return _mapper.Map<UserDataDTO>(userResult);
+            }
+
+            return new UserDataDTO();
         }
     }
 }

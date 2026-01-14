@@ -1,3 +1,24 @@
+Configuración base
+
+Servicios de infraestructura (DB, Identity)
+
+Repositorios
+
+Servicios de aplicación
+
+MVC / Controllers
+
+AutoMapper
+
+Seguridad (Auth / JWT)
+
+Swagger
+
+CORS
+
+Versionado
+
+Pipeline HTTP (middleware)
 
 crear proyecto en cli:
 dotnet new webapi --use-controllers -n apipeliculas
@@ -29,3 +50,21 @@ _logger.LogCritical("Sistema ca�do");
 CORS: Cross Origin Resource Sharing
 Mecanismo de seguridad en navegadores web.
 Indica a un servidor si una aplicacion web cargada en un dominio diferente puede acceder a sus recursos.
+
+---------------------------------------------------------------------------------------
+INDENTITY
+FRAMEWORK DE GESTION DE IDENTIDAD, AUTENTICACION Y AUTORIZACION.
+CAPA DE INFRAESTRUCTURA EMBEBIDA EN TU APLICACION.
+
+Biblioteca de administracion de identidad/almacenamiento de usuarios.
+ASP INDENTITY no es Indentity server ni identity framework
+administra usuarios, contrasenas, datos de perfil, roles, notifiaciones, etc.
+provedores externos, google facebook, MICROSOFT etc.
+Ya provee metodos para registro, acceso, password, recuperar, autenticacion, cookies, etc.
+
+
+TABLAS QUE TRAE:
+USERS
+ROLES
+RELACION USER A ROLES
+---------------------------------------------------------------------------------------

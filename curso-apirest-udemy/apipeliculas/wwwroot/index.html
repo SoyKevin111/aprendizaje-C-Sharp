@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Subir Imagen</title>
+</head>
+
+<body>
+  <h2>Subir Imagen</h2>
+  <input type="file" id="fileInput" accept="image/*">
+  <button onclick="uploadImage()">Subir</button>
+  <div id="result"></div>
+
+  <script>
+    async function uploadImage() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Selecciona un archivo');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/api/movies/upload/img?api-version=1.0', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error del servidor:', errorText);
+          alert('Error del servidor: ' + errorText);
+          return;
+        }
+
+        const result = await response.json();
+        document.getElementById('result').innerHTML =
+          `<img src="${result.url}" style="max-width: 300px;">`;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  </script>
+</body>
+
+</html>
